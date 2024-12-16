@@ -1,35 +1,65 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { getLoans } from '../services/loanService';
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { getLoans } from "../services/loanService";
 
 const Dashboard = () => {
-    const { auth } = useContext(AuthContext);
-    const [loans, setLoans] = useState([]);
+  const { auth } = useContext(AuthContext);
+  const [loans, setLoans] = useState([]);
 
-    useEffect(() => {
-        const fetchLoans = async () => {
-            try {
-                const data = await getLoans(auth.token);
-                setLoans(data);
-            } catch (error) {
-                console.error('Error fetching loans: ', error);
-            }
-        };
-        fetchLoans();
-    }, [auth.token]);
+  useEffect(() => {
+    const fetchLoans = async () => {
+      try {
+        const data = await getLoans(auth.token);
+        setLoans(data);
+      } catch (error) {
+        console.error("Error fetching loans: ", error);
+      }
+    };
+    fetchLoans();
+  }, [auth.token]);
 
-    return (
-        <div>
-            <h2>List of Loans</h2>
-            <ul>
-                {loans.map((loan) => (
-                    <li key={loan._id}>
-                        Amount: {loan.amount}, Duration: {loan.duration} months, EMI: {loan.emi.toFixed(2)}, Interest Rate: {loan.interestRate}%, Status: {loan.status}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2 className="mb-4 text-center">Hello {auth.user.personalInfo.name}!</h2>
+      <h4>Approved Loans</h4>
+      <div className="row">
+        {loans.map((loan) => (
+          <div key={loan._id} className="col-md-6">
+            <div className="card mb-4 shadow-sm">
+              <div
+                className="card-header"
+                style={{ backgroundColor: "#355e58", color: "white" }}
+              >
+                <h3>{capitalizeFirstLetter(loan.category)} Loan</h3>
+              </div>
+              <div className="card-body">
+                <p className="card-text">
+                  <strong>Amount:</strong> {loan.amount}
+                </p>
+                <p className="card-text">
+                  <strong>Duration:</strong> {loan.duration} months
+                </p>
+                <p className="card-text">
+                  <strong>EMI:</strong> {loan.emi.toFixed(2)}
+                </p>
+                <p className="card-text">
+                  <strong>Interest Rate:</strong> {loan.interestRate}%
+                </p>
+                <p className="card-text">
+                  <strong>Status:</strong> {loan.status}
+                </p>
+              </div>
+              <div className="card-footer" style={{backgroundColor: "#355e58"}}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;
