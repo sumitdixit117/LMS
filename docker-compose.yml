@@ -1,0 +1,32 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - JWT_SECRET=23a5a4f0e5bca600597803d2f83ed1156c236c32239ad18d7ef83cfc0bc250b80171ea1db864db2d51bde25930e35c17e5cdf6b67e07afb9aa8853814dcb0c2c
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
