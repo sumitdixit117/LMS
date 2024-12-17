@@ -8,13 +8,14 @@ const Footer = () => {
       backgroundColor: "#355e58",
       color: "white",
       width: "100%",
-      marginTop: "30px", // Adding margin-top for spacing above the footer
+      borderRadius: "0 0 0.25rem 0.25rem",
+      marginTop: '50px'
     }
   };
 
   return (
     <div style={styles.footer}>
-      &copy; 2024 Your Company. All rights reserved.
+      &copy; 2024 LMSys. All rights reserved.
     </div>
   );
 };

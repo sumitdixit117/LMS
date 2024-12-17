@@ -25,39 +25,57 @@ const Dashboard = () => {
   return (
     <div className="container mt-5">
       <h2 className="mb-4 text-center">Hello {auth.user.personalInfo.name}!</h2>
-      <h4>Approved Loans</h4>
-      <div className="row">
-        {loans.map((loan) => (
-          <div key={loan._id} className="col-md-6">
-            <div className="card mb-4 shadow-sm">
-              <div
-                className="card-header"
-                style={{ backgroundColor: "#355e58", color: "white" }}
-              >
-                <h3>{capitalizeFirstLetter(loan.category)} Loan</h3>
+      {loans.length === 0 ? (
+        <div className="text-center">
+          <h4 style={{ marginTop: "40px" }}>No loans currently</h4>
+        </div>
+      ) : (
+        <>
+          <h4 style={{ marginTop: "40px", marginBottom: "20px" }}>
+            Approved Loans
+          </h4>
+          <div className="row">
+            {loans.map((loan) => (
+              <div key={loan._id} className="col-md-6">
+                <div className="card mb-4 shadow-sm">
+                  <div
+                    className="card-header"
+                    style={{ backgroundColor: "#355e58", color: "white" }}
+                  >
+                    <h3>{capitalizeFirstLetter(loan.category)} Loan</h3>
+                  </div>
+                  <div className="card-body">
+                    <p className="card-text">
+                      <strong>Amount:</strong> {loan.amount}
+                    </p>
+                    <p className="card-text">
+                      <strong>Duration:</strong> {loan.duration} months
+                    </p>
+                    <p className="card-text">
+                      <strong>EMI:</strong> {loan.emi.toFixed(2)}
+                    </p>
+                    <p className="card-text">
+                      <strong>Interest Rate:</strong> {loan.interestRate}%
+                    </p>
+                    <p className="card-text">
+                      <strong>Co-Applicant:</strong>{" "}
+                      {loan.coApplicant && loan.coApplicant.name ? "Yes" : "No"}
+                    </p>
+
+                    <p className="card-text">
+                      <strong>Status:</strong> {loan.status}
+                    </p>
+                  </div>
+                  <div
+                    className="card-footer"
+                    style={{ backgroundColor: "#355e58" }}
+                  ></div>
+                </div>
               </div>
-              <div className="card-body">
-                <p className="card-text">
-                  <strong>Amount:</strong> {loan.amount}
-                </p>
-                <p className="card-text">
-                  <strong>Duration:</strong> {loan.duration} months
-                </p>
-                <p className="card-text">
-                  <strong>EMI:</strong> {loan.emi.toFixed(2)}
-                </p>
-                <p className="card-text">
-                  <strong>Interest Rate:</strong> {loan.interestRate}%
-                </p>
-                <p className="card-text">
-                  <strong>Status:</strong> {loan.status}
-                </p>
-              </div>
-              <div className="card-footer" style={{backgroundColor: "#355e58"}}></div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 };

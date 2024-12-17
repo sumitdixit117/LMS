@@ -1,26 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { updateProfile } from "../services/authService";
+import { forgotPassword } from "../services/authService";
 
-const EditProfile = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+const ForgotPassword = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
-    phone: "",
+    newPassword: "",
   });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (auth && auth.user) {
-      setFormData({
-        name: auth.user.personalInfo.name,
-        email: auth.user.personalInfo.email,
-        phone: auth.user.personalInfo.phone,
-      });
-    }
-  }, [auth]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,15 +16,13 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(auth.user);
     try {
-      const updatedUser = await updateProfile(auth.user.id, formData);
-      setAuth({ ...auth, user: updatedUser });
-      alert("Profile updated successfully!");
-      navigate("/profile");
+      await forgotPassword(formData);
+      alert("Password is updated!");
+      navigate("/login");
     } catch (error) {
-      console.error("Update Failed: ", error);
-      alert("Profile update failed! Please try again.");
+      console.error("Password Reset Failed: ", error);
+      alert("Password reset failed! Please try again.");
     }
   };
 
@@ -50,61 +36,81 @@ const EditProfile = () => {
       backgroundColor: "#355e58",
       textAlign: "center",
     },
+    link: {
+      color: "black",
+      fontSize: "13px",
+    },
   };
 
   return (
     <div className="container mt-5" style={{ maxWidth: "600px" }}>
       <div className="card shadow-sm">
         <div className="card-header" style={styles.cardHeader}>
-          <h2 className="mb-0">Edit Profile</h2>
+          <h2 className="mb-0">Forgot Password</h2>
         </div>
         <div className="card-body" style={{ padding: "0px" }}>
           <form
             onSubmit={handleSubmit}
-            className="needs-validation"
+            className="needs-validation card-body"
             noValidate
             style={{ border: "hidden" }}
           >
             <div className="form-group">
-              <label className="col-form-label">Name</label>
+              <label
+                className="col-form-label"
+                style={{ float: "left", marginLeft: "10px" }}
+              >
+                Username
+              </label>
               <input
                 type="text"
-                name="name"
+                name="username"
                 onChange={handleChange}
-                value={formData.name}
                 className="form-control"
+                placeholder="Username"
                 required
               />
             </div>
             <div className="form-group">
-              <label className="col-form-label">Email</label>
+              <label
+                className="col-form-label"
+                style={{ float: "left", marginLeft: "10px" }}
+              >
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
                 onChange={handleChange}
-                value={formData.email}
                 className="form-control"
+                placeholder="Email"
                 required
               />
             </div>
             <div className="form-group">
-              <label className="col-form-label">Phone</label>
+              <label
+                className="col-form-label"
+                style={{ float: "left", marginLeft: "10px" }}
+              >
+                New Password
+              </label>
               <input
-                type="text"
-                name="phone"
+                type="password"
+                name="newPassword"
                 onChange={handleChange}
-                value={formData.phone}
                 className="form-control"
+                placeholder="New Password"
                 required
               />
             </div>
-            <button
-              type="submit"
-              className="btn btn-success btn-block"
-              style={{ marginTop: "30px" }}
-            >
-              Save Changes
+            <button type="submit" className="btn btn-success btn-block">
+              Reset Password
             </button>
+            <div className="mt-3">
+              <a href="/login" style={styles.link}>
+                Back to Login
+              </a>
+            </div>
           </form>
         </div>
         <div className="card-footer" style={styles.cardFooter}></div>
@@ -113,4 +119,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default ForgotPassword;

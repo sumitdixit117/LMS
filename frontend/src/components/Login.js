@@ -37,7 +37,7 @@ const Login = () => {
     },
     link: {
       color: "black",
-      fontSize: '13px'
+      fontSize: "13px",
     },
   };
 
@@ -47,10 +47,20 @@ const Login = () => {
         <div className="card-header" style={styles.cardHeader}>
           <h2 className="mb-0">Login</h2>
         </div>
-        <div className="card-body" style={{padding: '0px'}}>
-          <form onSubmit={handleSubmit} className="needs-validation card-body" noValidate style={{border: 'hidden'}}>
+        <div className="card-body" style={{ padding: "0px" }}>
+          <form
+            onSubmit={handleSubmit}
+            className="needs-validation card-body"
+            noValidate
+            style={{ border: "hidden" }}
+          >
             <div className="form-group">
-              <label className="col-form-label" style={{float: 'left', marginLeft: '10px'}}>Username</label>
+              <label
+                className="col-form-label"
+                style={{ float: "left", marginLeft: "10px" }}
+              >
+                Username
+              </label>
               <input
                 type="text"
                 name="username"
@@ -61,7 +71,12 @@ const Login = () => {
               />
             </div>
             <div className="form-group">
-              <label className="col-form-label" style={{float: 'left', marginLeft: '10px'}}>Password</label>
+              <label
+                className="col-form-label"
+                style={{ float: "left", marginLeft: "10px" }}
+              >
+                Password
+              </label>
               <input
                 type="password"
                 name="password"
@@ -77,6 +92,11 @@ const Login = () => {
             <div className="mt-3">
               <a href="/register" style={styles.link}>
                 Don't have an account? Register
+              </a>
+            </div>
+            <div className="mt-1">
+              <a href="/forgot" style={styles.link}>
+                Forgot Password?
               </a>
             </div>
           </form>

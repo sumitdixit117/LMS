@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "4h" },
       (err, token) => {
         if (err) throw err;
         res.json({ token, user: payload.user });
@@ -66,7 +66,6 @@ exports.register = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
-  console.log("Update request for user:", id);
   try {
     let user = await User.findById(id);
     if (!user) {
@@ -76,10 +75,25 @@ exports.updateUser = async (req, res) => {
     user.personalInfo.email = email;
     user.personalInfo.phone = phone;
     await user.save();
-    console.log("Updated user:", user);
     res.json(user);
   } catch (err) {
     console.error("Update User Error: ", err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { username, email, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ username, "personalInfo.email": email });
+    if (!user)
+      return res.status(400).json({ msg: "Invalid username or email" });
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    res.json({ msg: "Password reset successful!" });
+  } catch (err) {
+    console.error("Forgot Password Error: ", err);
     res.status(500).json({ msg: "Server error" });
   }
 };

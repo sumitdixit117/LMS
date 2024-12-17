@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light" style={navbarStyles}>
       <Link className="navbar-brand" to="/" style={styles.formLabel}>
-        LMS
+        LMSys
       </Link>
       <div className="collapse navbar-collapse">
         <ul

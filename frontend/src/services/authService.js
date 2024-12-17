@@ -30,3 +30,12 @@ export const updateProfile = async (userId, updatedData) => {
   );
   return response.data;
 };
+
+export const forgotPassword = async (formData) => {
+  try {
+    const response = await axios.post("http://localhost:5000/api/auth/forgot", formData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

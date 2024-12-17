@@ -9,7 +9,16 @@ const calculateEMI = (amount, interestRate, duration) => {
 };
 
 exports.applyLoan = async (req, res) => {
-  const { amount, duration, salary, creditScore, category } = req.body;
+  const {
+    amount,
+    duration,
+    salary,
+    creditScore,
+    category,
+    coApplicantName,
+    coApplicantSalary,
+    coApplicantContact,
+  } = req.body;
 
   try {
     const existingLoans = await Loan.find({ userId: req.user.id });
@@ -19,32 +28,41 @@ exports.applyLoan = async (req, res) => {
         .json({ message: "You have reached the maximum limit of 4 loans." });
     }
 
-    if (creditScore < 100 || creditScore > 700) {
+    if (amount >= 5000000) {
       return res
         .status(400)
-        .json({
-          message: "Invalid credit score. It should be between 100 and 700.",
-        });
+        .json({ message: "Amount greater than 5000000 can't be provided." });
     }
 
-    if (salary < 3) {
+    if (creditScore < 100 || creditScore > 700) {
+      return res.status(400).json({
+        message: "Invalid credit score. It should be between 100 and 700.",
+      });
+    }
+
+    let totalSalary = parseFloat(salary);
+    if (coApplicantSalary) {
+      totalSalary += parseFloat(coApplicantSalary);
+    }
+
+    if (totalSalary < 3) {
       return res
         .status(400)
-        .json({ message: "You are not eligible for a loan." });
+        .json({ message: "You are not eligible for any loan." });
     }
 
     let interestRate = 0;
     if (category === "car" || category === "bike") {
-      if (creditScore > 400 && salary >= 5) {
-        interestRate = 10; 
+      if (creditScore > 400 && totalSalary >= 5) {
+        interestRate = 10;
       } else {
         return res
           .status(400)
           .json({ message: "You are not eligible for car/bike loan." });
       }
     } else if (category === "home") {
-      if (creditScore > 600 && salary >= 8) {
-        interestRate = 8; 
+      if (creditScore > 600 && totalSalary >= 8) {
+        interestRate = 8;
       } else {
         return res
           .status(400)
@@ -52,7 +70,7 @@ exports.applyLoan = async (req, res) => {
       }
     } else if (category === "gold") {
       if (creditScore >= 200) {
-        interestRate = 12; 
+        interestRate = 12;
       } else {
         return res
           .status(400)
@@ -72,6 +90,11 @@ exports.applyLoan = async (req, res) => {
       interestRate,
       emi,
       status: "Approved",
+      coApplicant: {
+        name: coApplicantName || null,
+        salary: coApplicantSalary || null,
+        contact: coApplicantContact || null,
+      },
     });
 
     await newLoan.save();

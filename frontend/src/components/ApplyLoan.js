@@ -10,12 +10,27 @@ const ApplyLoan = () => {
     salary: "",
     creditScore: "",
     category: "",
+    coApplicant: false,
+    coApplicantName: "",
+    coApplicantSalary: "",
+    coApplicantContact: "",
   });
+
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCoApplicantChange = () => {
+    setFormData({
+      ...formData,
+      coApplicant: !formData.coApplicant,
+      coApplicantName: "",
+      coApplicantSalary: "",
+      coApplicantContact: "",
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -36,9 +51,10 @@ const ApplyLoan = () => {
       fontWeight: "bold",
     },
     formContainer: {
-        maxWidth: "800px", 
-        backgroundColor: "#355e58",
-    }
+      maxWidth: "800px",
+      backgroundColor: "#355e58",
+      padding: "45px",
+    },
   };
 
   return (
@@ -50,6 +66,7 @@ const ApplyLoan = () => {
         noValidate
         style={styles.formContainer}
       >
+        {/* Loan Amount */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Amount
@@ -65,6 +82,8 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
+        {/* Loan Duration */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Duration (months)
@@ -80,6 +99,8 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
+        {/* Salary */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Salary (LPA)
@@ -95,6 +116,8 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
+        {/* Credit Score */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Credit Score
@@ -110,6 +133,8 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
+        {/* Loan Category */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Loan Category
@@ -132,6 +157,8 @@ const ApplyLoan = () => {
             </select>
           </div>
         </div>
+
+        {/* File Uploads */}
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Aadhaar Card
@@ -146,6 +173,7 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             PAN Card
@@ -160,6 +188,7 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
+
         <div className="form-group row">
           <label className="col-sm-4 col-form-label" style={styles.formLabel}>
             Salary Slips
@@ -174,7 +203,81 @@ const ApplyLoan = () => {
             />
           </div>
         </div>
-        <button type="submit" className="btn btn-success btn-block">
+
+        {/* Co-Applicant Section */}
+        <div className="form-group row">
+          <label className="col-sm-4 col-form-label" style={styles.formLabel}>
+            Add Co-Applicant?
+          </label>
+          <div className="col-sm-8" style={{paddingRight: '430px'}}>
+            <input
+              type="checkbox"
+              name="coApplicant"
+              checked={formData.coApplicant}
+              onChange={handleCoApplicantChange}
+            />
+          </div>
+        </div>
+
+        {/* Co-Applicant Name */}
+        {formData.coApplicant && (
+          <div className="form-group row">
+            <label className="col-sm-4 col-form-label" style={styles.formLabel}>
+              Co-Applicant Name
+            </label>
+            <div className="col-sm-8">
+              <input
+                type="text"
+                name="coApplicantName"
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Co-Applicant Name"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Co-Applicant Salary */}
+        {formData.coApplicant && (
+          <div className="form-group row">
+            <label className="col-sm-4 col-form-label" style={styles.formLabel}>
+              Co-Applicant Salary (LPA)
+            </label>
+            <div className="col-sm-8">
+              <input
+                type="number"
+                name="coApplicantSalary"
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Co-Applicant Salary (LPA)"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Co-Applicant Contact Number */}
+        {formData.coApplicant && (
+          <div className="form-group row">
+            <label className="col-sm-4 col-form-label" style={styles.formLabel}>
+              Co-Applicant Contact Number
+            </label>
+            <div className="col-sm-8">
+              <input
+                type="text"
+                name="coApplicantContact"
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Co-Applicant Contact"
+              />
+            </div>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="btn btn-success btn-block"
+          style={{ marginTop: "30px" }}
+        >
           Apply
         </button>
       </form>
